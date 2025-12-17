@@ -1,23 +1,18 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK;
+﻿using System;
+using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace OpenTKTut.Shapes
 {
     class Sphere : OGLShape
     {
-        public Sphere(Vector3 center, double radius, bool AutoRotate,bool orbiting ,bool moon ,float rotatingSpeed, float RotatingRadius , float orbitingSpeed, float moonorbit , float moonSpeed, int textype)
+        public Sphere(Vector3 center, double radius, bool AutoRotate, bool orbiting, bool moon,
+                     float rotatingSpeed, float RotatingRadius, float orbitingSpeed,
+                     float moonorbit, float moonSpeed, int textype)
         {
             _Center = center;
             Radius = radius;
-            MeshPolygons = MeshElement.Sphere(Radius); 
+            MeshPolygons = MeshElement.Sphere(Radius);
             EnableAutoRotate = AutoRotate;
             Orbiting = orbiting;
             Moon = moon;
@@ -29,21 +24,18 @@ namespace OpenTKTut.Shapes
             Textype = textype;
         }
 
-        
         public double Radius { get; set; }
         public int Textype;
 
         protected override void ShapeDrawing()
         {
-            
             GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-
             GL.BindTexture(TextureTarget.Texture2D, Textype);
 
-
             GL.Begin(PrimitiveType.Quads);
-            GL.Color3(new float[] { 1.0f, 1.0f, 1.0f });
-            for (int i=0;i< MeshPolygons.Length;i++)
+            GL.Color3(1.0f, 1.0f, 1.0f);
+
+            for (int i = 0; i < MeshPolygons.Length; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
@@ -51,13 +43,9 @@ namespace OpenTKTut.Shapes
                     GL.TexCoord2(MeshPolygons[i].Texcoord[j]);
                     GL.Vertex3(MeshPolygons[i].Vertices[j]);
                 }
-               
             }
-            GL.End();
-            
-            
-        }
 
-        
+            GL.End();
+        }
     }
 }
