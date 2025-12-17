@@ -1,19 +1,44 @@
-﻿
-using System;
-using OpenTK;
-using System.Drawing.Imaging;
+﻿using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using System.Drawing.Imaging;
+using System;
 
 namespace OpenTKTut
 {
     partial class Viewport
     {
-        GameWindow _window { get; set; }
-        public Viewport(BitmapData TextureData1, BitmapData TextureData2, BitmapData TextureData3, BitmapData TextureData4, BitmapData TextureData5, BitmapData TextureData6, BitmapData TextureData7, BitmapData TextureData8, BitmapData TextureData9, BitmapData TextureData10,BitmapData TextureData11, BitmapData TextureData12, BitmapData TextureData13)
+        private GameWindow _window;
+        public BitmapData texData1, texData2, texData3, texData4, texData5, texData6,
+                         texData7, texData8, texData9, texData10, texData11, texData12, texData13;
+
+        private Random R1 = new Random(4);
+        private Random R2 = new Random(19);
+        private Random R3 = new Random(25);
+        public Vector3[] starposition = new Vector3[1000];
+
+        public Viewport(BitmapData TextureData1, BitmapData TextureData2, BitmapData TextureData3,
+               BitmapData TextureData4, BitmapData TextureData5, BitmapData TextureData6,
+               BitmapData TextureData7, BitmapData TextureData8, BitmapData TextureData9,
+               BitmapData TextureData10, BitmapData TextureData11, BitmapData TextureData12,
+               BitmapData TextureData13)
         {
-            _window = new GameWindow(1720, 800);
+            var nativeWindowSettings = new NativeWindowSettings()
+            {
+                ClientSize = new Vector2i(1720, 800),
+                Title = "Solar System Simulation",
+                Flags = ContextFlags.Default,
+                Profile = ContextProfile.Compatability,
+                API = ContextAPI.OpenGL,
+                APIVersion = new Version(3, 3)
+            };
+
+            _window = new GameWindow(GameWindowSettings.Default, nativeWindowSettings);
             InitializeObjects();
             SetEvents();
+
             texData1 = TextureData1;
             texData2 = TextureData2;
             texData3 = TextureData3;
@@ -26,52 +51,27 @@ namespace OpenTKTut
             texData10 = TextureData10;
             texData11 = TextureData11;
             texData12 = TextureData12;
-            texData13 = TextureData13; //
+            texData13 = TextureData13;
 
-            //calculate star positions
-
-
+            // Calculate star positions
             for (int i = 0; i < 1000; i++)
             {
-                starposition[i].X = R1.Next(-70,70);
-                starposition[i].Y = R2.Next(-80,80); 
-                starposition[i].Z = R3.Next(-80, 50);  
+                starposition[i] = new Vector3(
+                    R1.Next(-70, 70),
+                    R2.Next(-80, 80),
+                    R3.Next(-80, 50)
+                );
             }
         }
 
-        public BitmapData texData1;
-        public BitmapData texData2;
-        public BitmapData texData3;
-        public BitmapData texData4;
-        public BitmapData texData5;
-        public BitmapData texData6;
-        public BitmapData texData7;
-        public BitmapData texData8;
-        public BitmapData texData9;
-        public BitmapData texData10;
-        public BitmapData texData11;
-        public BitmapData texData12;
-        public BitmapData texData13;
-
-        Random R1 = new Random(4);
-        Random R2 = new Random(19);
-        Random R3 = new Random(25);
-
-        public Vector3[] starposition = new Vector3[1000];
-        
         public void Start()
         {
-            _window.Run(24.0);
+            _window.Run();
         }
-
-
-
 
         public void AddShape(Shapes.OGLShape oGLShape)
         {
             _drawList.Add(oGLShape);
         }
-
-        
     }
 }
